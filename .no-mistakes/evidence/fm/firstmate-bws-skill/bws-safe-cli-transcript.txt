@@ -1,0 +1,22 @@
+$ skills/bws/scripts/bws-safe.sh --help
+bws-safe.sh - safe helper for Bitwarden Secrets Manager CLI (bws)
+
+Usage:
+  bws-safe.sh probe
+  bws-safe.sh redact-json
+  bws-safe.sh list-metadata [PROJECT_ID]
+  bws-safe.sh resolve-id <PROJECT_ID> <KEY>
+
+Never prints access tokens or secret values.
+
+$ env -u BWS_ACCESS_TOKEN -u BWS_PROFILE -u BWS_CONFIG_FILE HOME=/tmp/bws-evidence-empty-home PATH=/usr/bin:/bin skills/bws/scripts/bws-safe.sh probe
+status=unavailable version=none token_present=no
+
+$ printf <sample-secret-json> | skills/bws/scripts/bws-safe.sh redact-json
+{
+  "id": "secret-id",
+  "key": "DATABASE_URL",
+  "value": "[REDACTED]",
+  "note": "[REDACTED]",
+  "projectId": "project-id"
+}
