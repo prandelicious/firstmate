@@ -1,0 +1,9 @@
+#!/bin/sh
+case "${1:-}" in
+  --version) printf 'sops 3.9.0\n' ;;
+  --decrypt|-d|decrypt)
+    [ -n "${SOPS_AGE_KEY_FILE:-}${FM_FAKE_BWS_INJECTED:-}" ] || exit 1
+    printf 'password: synthetic-hidden-value\n'
+    ;;
+  *) exit 2 ;;
+esac

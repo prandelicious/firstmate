@@ -1,0 +1,15 @@
+$ sops-safe.sh probe
+status=ready sops_version=3.9.0 age_version=1.2.0
+
+$ sops-safe.sh detect-age-identity (operator-managed file)
+age_identity_present=yes source=file
+
+$ sops-safe.sh with-age-key file ... -- sops --decrypt secret.enc.yaml
+exit=0 decrypted_stdout_bytes=0
+
+$ sops-safe.sh with-age-key bws project-fixture -- sops --decrypt secret.enc.yaml
+exit=0 decrypted_stdout_bytes=0
+
+$ sops-safe.sh with-age-key file ... -- env sops --decrypt secret.enc.yaml
+exit=2
+sops-safe: with-age-key accepts direct sops decrypt, encrypt, edit, updatekeys, or rotate commands only
