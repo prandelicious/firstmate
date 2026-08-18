@@ -3,7 +3,7 @@
 Lookup owners:
 
 - [Write accessible documentation](https://developers.google.com/style/accessibility)
-- [Write for a global audience](https://developers.google.com/style/global-communications)
+- [Write for a global audience](https://developers.google.com/style/translation)
 - [Write inclusive documentation](https://developers.google.com/style/inclusive-documentation)
 
 ## Global audience

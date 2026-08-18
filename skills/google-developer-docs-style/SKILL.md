@@ -82,7 +82,7 @@ Write like a knowledgeable friend who respects the reader's time.
 - Avoid exclamation marks except where the product truly requires them.
 - Do not pre-announce future features in documentation.
 - Write for a global audience with varying English proficiency.
-- See [Write for a global audience](https://developers.google.com/style/global-communications) and [Write accessible documentation](https://developers.google.com/style/accessibility).
+- See [Write for a global audience](https://developers.google.com/style/translation) and [Write accessible documentation](https://developers.google.com/style/accessibility).
 
 ## Person, voice, and sentence shape
 
@@ -149,7 +149,7 @@ Write like a knowledgeable friend who respects the reader's time.
 - Provide meaningful alt text that states the image's purpose, not its filename.
 - Prefer SVG or high-resolution sources when practical.
 - Do not use images of text, code, or terminal output when real text works.
-- Details: [Text associated with images](https://developers.google.com/style/alt-text)
+- Details: [Diagrams, figures, and other images](https://developers.google.com/style/images)
 
 ## Word list without vendoring
 
