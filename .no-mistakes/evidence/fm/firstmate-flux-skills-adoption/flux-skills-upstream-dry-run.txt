@@ -1,0 +1,2 @@
+dry-run: would vendor fluxcd/agent-skills at v0.2.0 (9b05787530a3e200a9ac031fc8a477566e0b7adc)
+dry-run: adopted skills: gitops-knowledge gitops-repo-audit

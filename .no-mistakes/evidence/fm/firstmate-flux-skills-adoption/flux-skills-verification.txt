@@ -1,0 +1,20 @@
+Flux CD skills adoption — maintainer-visible verification
+
+Command:
+bin/fm-flux-skills-verify.sh
+
+Output:
+fm-flux-skills-verify: ok fluxcd/agent-skills v0.2.0 (9b05787530a3e200a9ac031fc8a477566e0b7adc); skills: gitops-knowledge gitops-repo-audit
+
+Focused behavior test:
+bin/fm-test-run.sh tests/flux-skills-adoption.test.sh
+
+Observed behaviors:
+- accepts the committed vendor tree
+- rejects checksum tampering
+- rejects unlisted adopted files
+- requires the upstream license
+- rejects adopted-skill and top-level symlinks
+- parses manifest values as inert data
+
+Result: passed on 2026-08-18 (Asia/Manila workspace session).
