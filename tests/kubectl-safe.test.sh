@@ -74,11 +74,29 @@ run_with_fake() {
   env FM_FAKE_KUBECTL_MODE="$mode" PATH="$fakebin:$PATH" "$@"
 }
 
+path_without_command() {
+  local cmd=$1 entry filtered=''
+  local IFS=':'
+  local -a parts=()
+  read -ra parts <<< "${PATH:-}"
+  for entry in "${parts[@]}"; do
+    [ -n "$entry" ] || continue
+    [ -x "$entry/$cmd" ] && continue
+    if [ -z "$filtered" ]; then
+      filtered="$entry"
+    else
+      filtered="$filtered:$entry"
+    fi
+  done
+  printf '%s\n' "$filtered"
+}
+
 test_probe_absent() {
-  local out fakebin
+  local out fakebin sanitized_path
   fakebin="$TMP_ROOT/absent-only/bin"
   mkdir -p "$fakebin"
-  out=$(env PATH="$fakebin:/usr/bin:/bin" "$HELPER" probe)
+  sanitized_path=$(path_without_command kubectl)
+  out=$(env PATH="$fakebin:$sanitized_path" "$HELPER" probe)
   assert_contains "$out" 'status=unavailable' 'absent kubectl should report unavailable'
   assert_contains "$out" 'version=none' 'absent kubectl should report version none'
   pass 'probe classifies absent kubectl'
