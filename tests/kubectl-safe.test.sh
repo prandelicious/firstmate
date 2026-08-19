@@ -92,11 +92,10 @@ path_without_command() {
 }
 
 test_probe_absent() {
-  local out fakebin sanitized_path
-  fakebin="$TMP_ROOT/absent-only/bin"
-  mkdir -p "$fakebin"
+  local out sanitized_path bash_path
+  bash_path=$(command -v bash)
   sanitized_path=$(path_without_command kubectl)
-  out=$(env PATH="$fakebin:$sanitized_path" "$HELPER" probe)
+  out=$(env PATH="$sanitized_path" "$bash_path" "$HELPER" probe)
   assert_contains "$out" 'status=unavailable' 'absent kubectl should report unavailable'
   assert_contains "$out" 'version=none' 'absent kubectl should report version none'
   pass 'probe classifies absent kubectl'
