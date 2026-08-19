@@ -23,6 +23,10 @@ for ARG in "$@"; do
     -d|--decrypt|decrypt) DECRYPT_REQUESTED=1 ;;
   esac
 done
+if [ -n "${FM_FAKE_ENV_MARKER:-}" ]; then
+  printf 'SOPS_AGE_KEY=%s\nSOPS_AGE_KEY_FILE=%s\n' \
+    "${SOPS_AGE_KEY:-}" "${SOPS_AGE_KEY_FILE:-}" > "$FM_FAKE_ENV_MARKER"
+fi
 if [ "$DECRYPT_REQUESTED" -eq 1 ]; then
   if [ -n "${SOPS_AGE_KEY:-}${SOPS_AGE_KEY_FILE:-}" ] || [ -n "${FM_FAKE_BWS_INJECTED:-}" ]; then
     if [ -n "${FM_FAKE_DECRYPT_MARKER:-}" ]; then
@@ -257,21 +261,25 @@ test_with_age_key_refuses_conflicting_operations() {
   pass 'with-age-key refuses conflicting operation tokens'
 }
 
-test_with_age_key_unsets_identity_after() {
-  local key_file rc=0
-  key_file="$TMP_ROOT/unset-after.txt"
+test_with_age_key_clears_stray_identity_before_running() {
+  local key_file case_dir fakebin env_marker out
+  key_file="$TMP_ROOT/clears-stray.txt"
   printf 'AGE-SECRET-KEY-TESTKEYTESTKEYTESTKEYTESTKEYTESTKEYTEST\n' > "$key_file"
   chmod 600 "$key_file"
-  case_dir="$TMP_ROOT/unset-after"
-  make_fake_sops_age "$case_dir" ready ready >/dev/null
-  env -u SOPS_AGE_KEY -u SOPS_AGE_KEY_FILE PATH="$case_dir/fakebin:/usr/bin:/bin" \
-    "$HELPER" with-age-key file "$key_file" -- sops edit secret.enc.yaml
-  set +e
-  env -u SOPS_AGE_KEY -u SOPS_AGE_KEY_FILE "$HELPER" detect-age-identity >/dev/null
-  rc=$?
-  set -e
-  [ "$rc" -eq 1 ] || fail 'parent shell should have no age identity after with-age-key completes'
-  pass 'with-age-key does not leave age identity in the parent shell'
+  case_dir="$TMP_ROOT/clears-stray"
+  fakebin=$(make_fake_sops_age "$case_dir" ready ready)
+  env_marker="$case_dir/env-seen"
+  out=$(env -u SOPS_AGE_KEY_FILE \
+    SOPS_AGE_KEY='AGE-SECRET-KEY-STRAYSTRAYSTRAYSTRAYSTRAYSTRAYSTRAYSTRA' \
+    FM_FAKE_ENV_MARKER="$env_marker" PATH="$fakebin:/usr/bin:/bin" \
+    "$HELPER" with-age-key file "$key_file" -- sops --decrypt secret.enc.yaml)
+  [ -f "$env_marker" ] || fail 'with-age-key should have run the child sops command'
+  [ -z "$out" ] || fail 'with-age-key file must suppress decrypted stdout'
+  assert_not_contains "$(<"$env_marker")" 'STRAY' \
+    'with-age-key must clear a stray parent-shell age identity before running the child command'
+  assert_contains "$(<"$env_marker")" "SOPS_AGE_KEY_FILE=$key_file" \
+    'with-age-key must inject the requested key file for the child command'
+  pass 'with-age-key clears a stray parent-shell age identity before running the child command'
 }
 
 test_probe_ready
@@ -285,4 +293,4 @@ test_with_age_key_file_mode
 test_with_age_key_bws_mode
 test_with_age_key_refuses_indirect_commands
 test_with_age_key_refuses_conflicting_operations
-test_with_age_key_unsets_identity_after
+test_with_age_key_clears_stray_identity_before_running
