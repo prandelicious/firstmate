@@ -261,6 +261,42 @@ test_with_age_key_refuses_conflicting_operations() {
   pass 'with-age-key refuses conflicting operation tokens'
 }
 
+test_with_age_key_refuses_decrypt_in_place() {
+  local key_file case_dir fakebin rc=0 out
+  key_file="$TMP_ROOT/refuse-in-place.txt"
+  printf 'AGE-SECRET-KEY-TESTKEYTESTKEYTESTKEYTESTKEYTESTKEYTEST\n' > "$key_file"
+  chmod 600 "$key_file"
+  case_dir="$TMP_ROOT/refuse-in-place"
+  fakebin=$(make_fake_sops_age "$case_dir" ready ready)
+  set +e
+  out=$(env -u SOPS_AGE_KEY -u SOPS_AGE_KEY_FILE PATH="$fakebin:/usr/bin:/bin" \
+    "$HELPER" with-age-key file "$key_file" -- sops --decrypt --in-place secret.enc.yaml 2>&1)
+  rc=$?
+  set -e
+  [ "$rc" -eq 2 ] || fail "decrypt --in-place should exit 2, got $rc"
+  assert_not_contains "$out" 'super-secret-value' 'refused decrypt --in-place must not print plaintext'
+  assert_contains "$out" 'accepts direct sops' 'decrypt --in-place should explain the direct-command boundary'
+  pass 'with-age-key refuses decrypt --in-place'
+}
+
+test_with_age_key_refuses_decrypt_output() {
+  local key_file case_dir fakebin rc=0 out
+  key_file="$TMP_ROOT/refuse-output.txt"
+  printf 'AGE-SECRET-KEY-TESTKEYTESTKEYTESTKEYTESTKEYTESTKEYTEST\n' > "$key_file"
+  chmod 600 "$key_file"
+  case_dir="$TMP_ROOT/refuse-output"
+  fakebin=$(make_fake_sops_age "$case_dir" ready ready)
+  set +e
+  out=$(env -u SOPS_AGE_KEY -u SOPS_AGE_KEY_FILE PATH="$fakebin:/usr/bin:/bin" \
+    "$HELPER" with-age-key file "$key_file" -- sops --decrypt --output leaked.yaml secret.enc.yaml 2>&1)
+  rc=$?
+  set -e
+  [ "$rc" -eq 2 ] || fail "decrypt --output should exit 2, got $rc"
+  assert_not_contains "$out" 'super-secret-value' 'refused decrypt --output must not print plaintext'
+  [ -f "$case_dir/leaked.yaml" ] && fail 'refused decrypt --output must not write plaintext to disk'
+  pass 'with-age-key refuses decrypt --output'
+}
+
 test_with_age_key_clears_stray_identity_before_running() {
   local key_file case_dir fakebin env_marker out
   key_file="$TMP_ROOT/clears-stray.txt"
@@ -293,4 +329,6 @@ test_with_age_key_file_mode
 test_with_age_key_bws_mode
 test_with_age_key_refuses_indirect_commands
 test_with_age_key_refuses_conflicting_operations
+test_with_age_key_refuses_decrypt_in_place
+test_with_age_key_refuses_decrypt_output
 test_with_age_key_clears_stray_identity_before_running

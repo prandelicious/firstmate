@@ -161,6 +161,13 @@ classify_sops_command() {
         return 1
         ;;
     esac
+    if [ "$operation" = decrypt ]; then
+      case "$arg" in
+        -i|--in-place|--output|--output=*)
+          return 1
+          ;;
+      esac
+    fi
   done
   printf '%s\n' "$operation"
 }
