@@ -88,7 +88,7 @@ cmd_role_attrs() {
 }
 
 cmd_dump_verify() {
-  local file=$1 size sha
+  local file=$1 size sha magic
   [ -n "$file" ] || die_usage "dump-verify requires DUMP_FILE"
   if [ ! -f "$file" ]; then
     printf 'status=missing file=%s\n' "$file" >&2
