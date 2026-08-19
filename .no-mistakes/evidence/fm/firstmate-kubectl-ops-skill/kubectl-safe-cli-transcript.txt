@@ -1,0 +1,30 @@
+$ kubectl-safe.sh probe
+status=ready version=v1.36.1+k3s1 current_context=default
+
+$ kubectl-safe.sh has-dry-run -- kubectl apply --dry-run=client -f manifest.yaml
+(exit 0, silent success)
+
+$ kubectl-safe.sh has-dry-run -- kubectl apply -f manifest.yaml
+kubectl-safe: command lacks --dry-run flag
+(exit 1)
+
+$ echo '{"kind":"Secret","data":{"token":"c2VjcmV0"}}' | kubectl-safe.sh redact-json
+{
+  "kind": "Secret",
+  "data": {
+    "token": "[REDACTED]"
+  }
+}
+
+$ kubectl-safe.sh --help
+kubectl-safe.sh - safe helper for kubectl cluster operations
+
+Usage:
+  kubectl-safe.sh probe
+  kubectl-safe.sh verify-context <EXPECTED_CONTEXT>
+  kubectl-safe.sh verify-namespace <NAMESPACE>
+  kubectl-safe.sh redact-json
+  kubectl-safe.sh cp-check <SOURCE> <DEST>
+  kubectl-safe.sh has-dry-run -- <command...>
+
+Never prints Secret values.
