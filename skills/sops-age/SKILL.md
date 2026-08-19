@@ -80,7 +80,7 @@ Modes:
 - `bws <PROJECT_ID> -- <sops-command...>` runs `bws run --project-id <PROJECT_ID> -- <sops-command...>` so the age key stays in the trusted child environment.
 - `file <KEY_FILE> -- <sops-command...>` sets `SOPS_AGE_KEY_FILE` for the child only when the operator provides a readable key file outside chat.
 
-The wrapper accepts only direct SOPS decrypt, encrypt, edit, updatekeys, and rotate operations, refuses commands whose arguments contain `AGE-SECRET-KEY-...`, suppresses decrypt stdout, and unsets `SOPS_AGE_KEY` and `SOPS_AGE_KEY_FILE` after the child exits.
+The wrapper accepts only direct SOPS decrypt, encrypt, edit, updatekeys, and rotate operations, refuses commands whose arguments contain `AGE-SECRET-KEY-...`, refuses decrypt commands that pass `-i`, `--in-place`, or `--output` so decrypted content can never reach disk through the wrapper, suppresses decrypt stdout, and unsets `SOPS_AGE_KEY` and `SOPS_AGE_KEY_FILE` after the child exits.
 The operation token must immediately follow the `sops` executable, and any second operation token makes the command invalid.
 It rejects intermediary executables such as `env` and shells because their eventual output cannot be classified safely.
 
@@ -149,9 +149,8 @@ Decrypt only when the task requires reading content.
 Prefer encrypted metadata inspection over decrypting values.
 
 1. Run decrypt inside `with-age-key bws` or `with-age-key file`, never with a key in parent arguments.
-2. Discard stdout when only the decryption result is needed for verification.
-3. Require explicit authority naming the file and environment before writing decrypted output to a restrictive, gitignored temporary file.
-4. Require the same authority to delete that temporary file, and clean it up in a `trap` or explicit cleanup step before finishing.
+2. Discard stdout; `with-age-key` decrypt is verification-only and confirms success or failure through the exit status.
+3. `with-age-key` refuses decrypt commands that pass `-i`, `--in-place`, or `--output`, so it never writes decrypted content to disk.
 
 ## Editing encrypted files
 
@@ -203,6 +202,7 @@ Do not leave decrypted content in the worktree.
 | `detect-age-identity` exit 1 | No usable private key in process | Use `with-age-key` or stop |
 | MAC mismatch / decryption error | Wrong key or corrupted file | Stop; do not retry with another environment's key |
 | `with-age-key` refuses arguments | Key material in argv | Remove key from command; use approved injection |
+| `with-age-key` refuses `-i`/`--in-place`/`--output` on decrypt | Wrapper blocks plaintext disk writes | Discard stdout for verification only; the wrapper cannot produce a decrypted file |
 | `bws run` non-zero | Secret or project access failure | Report without secret values; load `bws` skill |
 | `updatekeys` / `rotate` non-zero | Incomplete rotation | Stop; do not commit partial state |
 
