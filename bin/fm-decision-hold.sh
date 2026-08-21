@@ -847,7 +847,7 @@ command_answers() {
     if [ "$answer" = "$DROP_ANSWER" ]; then
       keyed_drop_decision_text "$source" "$k_key" "$label" > "$tmp" \
         || fail "cannot stage the captain decision for $hold"
-      if "$0" decline "$k_origin" "$k_key" --decision-file "$tmp" --drop >/dev/null 2>"$err"; then
+      if (command_drop "$k_origin" "$k_key" --decision-file "$tmp") >/dev/null 2>"$err"; then
         printf 'closed: %s\n' "$hold"
         closed=$((closed + 1))
       else
@@ -874,14 +874,13 @@ command_answers() {
 }
 
 command_decline() {
-  local preserve_routed=no last
   [ "$#" -ge 2 ] || { usage >&2; exit 2; }
-  if [ "${!#}" = --drop ]; then
-    preserve_routed=yes
-    last=$(($# - 1))
-    set -- "${@:1:last}"
-  fi
-  close_unrouted_hold declined declined "$preserve_routed" "$@"
+  close_unrouted_hold declined declined no "$@"
+}
+
+command_drop() {
+  [ "$#" -ge 2 ] || { usage >&2; exit 2; }
+  close_unrouted_hold declined declined yes "$@"
 }
 
 command_repair() {
