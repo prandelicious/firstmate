@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+printf 'visual evidence build only\n'

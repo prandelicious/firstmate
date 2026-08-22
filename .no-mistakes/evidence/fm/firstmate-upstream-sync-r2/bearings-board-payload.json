@@ -1,0 +1,35 @@
+{
+  "schema": "fm-bearings-board.v1",
+  "home": "firstmate",
+  "generated": "2026-08-22T10:25:00+08:00",
+  "prs_live": true,
+  "captains_call": [
+    {
+      "key": "sync-decision-release",
+      "type": "decision",
+      "repo": "prandelicious/firstmate",
+      "title": "Release synchronized fleet-board behavior?",
+      "about": "Upstream close/drop and always-on freeform behavior are ready for captain review.",
+      "decide": "Choose a disposition or enter a different answer.",
+      "options": [
+        {"value": "ship", "label": "Ship it", "hint": "recommended"},
+        {"value": "hold", "label": "Hold"}
+      ],
+      "allow_freeform": true
+    },
+    {
+      "key": "credential-host",
+      "type": "credential",
+      "repo": "prandelicious/firstmate",
+      "title": "Provide deployment host",
+      "detail": "This card intentionally has no preset choices.",
+      "freeform_hint": "Enter the deployment hostname",
+      "options": [],
+      "allow_freeform": true
+    }
+  ],
+  "underway": [],
+  "landed": [],
+  "charted": [],
+  "charted_more": 0
+}
