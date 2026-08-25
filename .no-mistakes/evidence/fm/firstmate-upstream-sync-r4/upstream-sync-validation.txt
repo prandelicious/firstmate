@@ -1,0 +1,51 @@
+Firstmate upstream-sync acceptance evidence
+
+Target merge topology:
+commit: 0fd54011483f67e451c2530aaed7b442115aeefe
+parents: 9b0953d528f42448c6029af0c8b483d36bd3672d 85d6c7226c936ec83f55f7612364f788fd36c206
+subject: Merge upstream/main into fork
+
+Ancestor preservation:
+PASS fork tip is retained
+PASS upstream tip is retained
+
+Fork-only workflow delta relative to upstream tip:
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 51480a5..6524ad3 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -5,6 +5,8 @@ on:
+     branches: [main]
+   pull_request:
+     branches: [main]
++    types: [opened, synchronize, reopened, edited]
++  workflow_dispatch:
+ 
+ permissions:
+   contents: read
+
+Executable workflow validation:
+FM_TEST_BEGIN 2026-08-25T11:21:11Z tests/fm-lint-workflows.test.sh family=pure-contract-unit expected_gate_skip=none
+ok - fm-lint-workflows.sh pins an explicit actionlint version (1.7.12)
+ok - current .github/workflows YAML files parse
+ok - column-0 heredoc workflow fails validation with a clear error
+ok - valid fixture workflow passes
+ok - empty workflows directory fails closed
+ok - explicit malformed workflow path fails validation
+ok - non-mapping workflow YAML root fails
+ok - missing actionlint fails closed
+ok - fm-lint-workflows.sh refuses to lint under a non-pinned actionlint version
+ok - actionlint installer retries a transient download failure
+ok - actionlint installer selects the official archive, URL, and checksum per OS/arch
+ok - actionlint installer rejects a wrong checksum
+ok - actionlint installer falls back to shasum -a 256 when sha256sum is absent
+ok - actionlint installer prefers sha256sum when both hashers are present
+ok - actionlint installer rejects an unsupported OS or architecture
+ok - fm-lint.sh default path catches a self-broken ci.yml
+FM_TEST_END 2026-08-25T11:21:12Z tests/fm-lint-workflows.test.sh exit=0 duration_ms=807 gate_skip=false
+FM_TEST_SUMMARY total=1 failed=0 skipped_gate=0 duration_ms=874
+FM_TEST_SUMMARY_FAMILY family=pure-contract-unit count=1 duration_ms=807 failed=0
+FM_TEST_SLOWEST rank=1 script=tests/fm-lint-workflows.test.sh duration_ms=807
+
+CI test-partition validation:
+FM_TEST_COVERAGE ok total=166 parallel=24 serial=130 serial_shards=4 herdr=12
