@@ -1,0 +1,21 @@
+MERGE PARENTS
+c5d589faa7b7c58d69adca95a9bd11e7e7fdc7a6
+1531768c62b321a1211eb679dd3fd50797a724f9 07bf0c8556c70b5241516efad0e51f802484c748
+
+CONFLICT-RESOLUTION BLOB CONTRACT
+MATCH .agents/skills/process-event-sources/SKILL.md 0b377f7da8811e586e80bc042692072e9dc6499e
+MATCH .github/workflows/no-mistakes-required.yml 41bbac1f56419b1ac67d3336023b95d0fe4f10e3
+MATCH .pi/extensions/fm-branch-supervision.ts 083e05d7445fc06406ec3c3f3a77986e574bc951
+MATCH .pi/extensions/lib/fm-branch-dispatch.ts 5b9c5a08f9119ab30c9c64ab6d11c6add4d44061
+MATCH bin/fm-procevent-lavish.sh 63804977b36e52cf1294482d148139e3668b9a07
+MATCH docs/configuration.md 49d26f573a707e2a0cc8c4840d7069ba567ed436
+MATCH docs/pi-supervision-branch.md 58d48284078f26d8018edfab647acf27fd9de552
+MATCH docs/verification/process-event-sources.md 06c2bb52ff26213d502201d23048f2a848e8f278
+MATCH docs/verification/runtime-backends.md 0b41062a155440eb9e71143978f5c4649e4017a2
+MATCH docs/watcher-continuity.md 26738628fea3b6847c440d4aa44b10da9cf00285
+MATCH tests/fm-pi-branch-extension.test.sh 16fd0b8c852c0bcbe3c7835f857d8b7d3bc722c7
+MATCH tests/fm-pi-branch-live-e2e.test.sh 4c4b9627f762078ffb71598f84e7a90f548d5aec
+MATCH tests/fm-pi-watch-extension.test.sh c7b708d0e86dd485824108f60a81b30aa33afcb1
+MATCH tests/fm-procevent.test.sh d7f49fdcbd29d4f70f75b77fc5f791bab9b59868
+
+RESULT: merge commit has two parents and all 14 resolved blobs exactly match upstream 07bf0c8

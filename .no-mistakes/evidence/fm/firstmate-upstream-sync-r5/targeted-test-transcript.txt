@@ -1,0 +1,8 @@
+RUN tests/fm-no-mistakes-required.test.sh
+ok - shared action accepts a matching head_sha with completed required steps
+ok - shared action rejects a mismatched head_sha and names both SHAs
+ok - shared action rejects an attestation with no head_sha
+RUN tests/fm-pi-primary-types.test.sh
+skip: tsc not found for Pi extension typecheck
+RUN tests/fm-pi-branch-extension.test.sh
+zsh:4: permission denied: tests/fm-pi-branch-extension.test.sh
