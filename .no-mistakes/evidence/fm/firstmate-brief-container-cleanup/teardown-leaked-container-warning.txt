@@ -1,0 +1,6 @@
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  repair a missing or failed watcher cycle with the Pi tool fm_watch_arm_pi, or restart Pi with -e /home/francis/.no-mistakes/worktrees/a12c6affcc8a/01M179DZSCZJFBEFYKH2JXMFNF/.pi/extensions/fm-primary-turnend-guard.ts -e /home/francis/.no-mistakes/worktrees/a12c6affcc8a/01M179DZSCZJFBEFYKH2JXMFNF/.pi/extensions/fm-primary-pi-watch.ts if the extensions are not loaded.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+warning: task task-x1 left running container(s) it should have stopped and removed (brief container clause); firstmate never removes containers, so stop and remove them manually if unwanted:
+warning:   fm-task-x1-pg
