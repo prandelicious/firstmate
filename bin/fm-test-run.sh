@@ -2274,6 +2274,7 @@ else
     fi
     if worker_root_mode_is_enforceable; then
       mode=$(stat -c %a "$work" 2>/dev/null || stat -f %Lp "$work" 2>/dev/null || echo unknown)
+      mode=$(stat -c %a "$work" 2>/dev/null || /usr/bin/stat -f %Lp "$work" 2>/dev/null || echo unknown)
       case "$mode" in
         700|0700) ;;
         *)
