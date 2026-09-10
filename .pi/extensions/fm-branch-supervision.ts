@@ -710,48 +710,6 @@ export default function (pi: ExtensionAPI) {
     }
   }
 
-  function deliverBranchHealthNote(text: string): void {
-    const message = { customType: "fm-branch-merge", content: `${MERGE_NOTE_BOAT} ${text}`, display: true };
-    if (mainStreaming) pi.sendMessage(message, { deliverAs: "nextTurn" });
-    else pi.sendMessage(message, {});
-  }
-
-  function recordSettledProviderError(detail: string): void {
-    consecutiveProviderErrors += 1;
-    if (consecutiveProviderErrors < PROVIDER_ERROR_LATCH_THRESHOLD && !providerRecovery) return;
-    const previousCooldownMs = providerRecovery?.cooldownMs;
-    const firstLatch = previousCooldownMs === undefined;
-    const cooldownMs = firstLatch
-      ? PROVIDER_REPROBE_BASE_MS
-      : Math.min(PROVIDER_REPROBE_MAX_MS, previousCooldownMs * 2);
-    branchBroken = detail;
-    providerRecovery = {
-      cooldownMs,
-      retryNotBefore: Date.now() + cooldownMs,
-      probeInFlight: false,
-    };
-    if (firstLatch) {
-      deliverBranchHealthNote("Supervision branch paused after repeated provider errors; main will handle wakes while it cools down.");
-    }
-  }
-
-  function recordDurableBranchReport(reportGeneration: number, reportSelectionRevision: number): void {
-    if (reportGeneration !== generation || reportSelectionRevision !== branchSelectionRevision) return;
-    consecutiveProviderErrors = 0;
-    if (!providerRecovery) return;
-    branchBroken = "";
-    providerRecovery = null;
-    deliverBranchHealthNote("Supervision branch recovered after a successful cooldown probe.");
-  }
-
-  function finishProviderProbe(probeGeneration: number, probeSelectionRevision: number): void {
-    if (probeGeneration !== generation || probeSelectionRevision !== branchSelectionRevision || !providerRecovery) return;
-    providerRecovery.probeInFlight = false;
-    if (branchBroken && providerRecovery.retryNotBefore <= Date.now()) {
-      providerRecovery.retryNotBefore = Date.now() + providerRecovery.cooldownMs;
-    }
-  }
-
   // Resolves one model against the isolated branch runtime using only the
   // credentials that runtime already holds - the branch runs in the same home
   // and same user as main, so stored credentials keep their own semantics

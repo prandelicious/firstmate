@@ -771,16 +771,6 @@ fm_remote_job_stage_owner_alive() { # <stage-dir>
   [ "$recorded_start" = "$actual_start" ]
 }
 
-fm_remote_job_stage_owner_alive() { # <stage-dir>
-  local stage=$1 pid recorded_start actual_start
-  pid=$(fm_remote_job_read_single_line "$stage/.owner-pid" 64 2>/dev/null) || return 1
-  case "$pid" in ''|*[!0-9]*) return 1 ;; esac
-  [ "$pid" -gt 1 ] || return 1
-  recorded_start=$(fm_remote_job_read_single_line "$stage/.owner-start" 256 2>/dev/null) || return 1
-  actual_start=$(fm_remote_job_process_start "$pid" 2>/dev/null) || return 1
-  [ "$recorded_start" = "$actual_start" ]
-}
-
 fm_remote_job_reap_stale() { # <account-home>
   local account_home=$1 job id state mtime now stage claim value marker tmp reap_claims=0
   fm_remote_job_prepare_state "$account_home" || return 1
