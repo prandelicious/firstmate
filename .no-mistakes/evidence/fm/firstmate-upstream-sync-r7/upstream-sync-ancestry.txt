@@ -1,0 +1,16 @@
+Firstmate upstream sync ancestry verification
+
+sync commit: eb8a678a08f8b5c89b79011918bc1519e8cae061
+parents: e9d92c7b8cb038c0ea54ab8cc6a23e040184b5ff b84e0e362face25f3dd8945297a3df1320d7668c
+subject: chore: sync fork with upstream main (round 7)
+
+Prior local tip is an ancestor of the tested target: YES
+Merged upstream tip is an ancestor of the tested target: YES
+
+History graph:
+* ee41625 (HEAD, fm/firstmate-upstream-sync-r7) no-mistakes(review): Remove duplicated merge-conflict residue
+*   eb8a678 chore: sync fork with upstream main (round 7)
+|\  
+| * b84e0e3 fix(procevent): reap orphaned runners and prevent launch storms (#3904)
+| * 891dc51 fix(bin): derive watcher beacon staleness grace from poll cadence (#3946)
+| * 72bfdd0 fix(spawn): carry attribution-off policy in every claude launch (#3945)
