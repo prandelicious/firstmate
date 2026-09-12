@@ -11,8 +11,9 @@ metadata:
 
 # gitops-repo-audit
 
-This stub loads the adopted official skill from [`skills/vendor/fluxcd-agent-skills/gitops-repo-audit/SKILL.md`](../../../skills/vendor/fluxcd-agent-skills/gitops-repo-audit/SKILL.md).
-Upstream provenance and pinned revision are recorded in [`skills/vendor/fluxcd-agent-skills/MANIFEST`](../../../skills/vendor/fluxcd-agent-skills/MANIFEST).
+This stub loads the adopted official skill from the iafk project at `.agents/skills/vendor/fluxcd-agent-skills/gitops-repo-audit/SKILL.md`.
+In this home that skill is the clone under `projects/iafk/`.
+Upstream provenance and pinned revision are recorded in that project's `.agents/skills/vendor/fluxcd-agent-skills/MANIFEST`.
 
 After this stub loads:
 

@@ -12,7 +12,7 @@ metadata:
 # flux-classic-gitops
 
 This skill is a narrow Firstmate-owned amendment.
-It does not replace the vendored official Flux CD skills under `skills/vendor/fluxcd-agent-skills/`.
+It does not replace the vendored official Flux CD skills, which live in the iafk project under `.agents/skills/vendor/fluxcd-agent-skills/` (`projects/iafk/` in this home).
 When this amendment conflicts with those skills on install model or bootstrap method, this amendment wins.
 
 ## When to apply
