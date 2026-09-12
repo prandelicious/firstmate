@@ -11,8 +11,9 @@ metadata:
 
 # gitops-knowledge
 
-This stub loads the adopted official skill from [`skills/vendor/fluxcd-agent-skills/gitops-knowledge/SKILL.md`](../../../skills/vendor/fluxcd-agent-skills/gitops-knowledge/SKILL.md).
-Upstream provenance and pinned revision are recorded in [`skills/vendor/fluxcd-agent-skills/MANIFEST`](../../../skills/vendor/fluxcd-agent-skills/MANIFEST).
+This stub loads the adopted official skill from the iafk project at `.agents/skills/vendor/fluxcd-agent-skills/gitops-knowledge/SKILL.md`.
+In this home that skill is the clone under `projects/iafk/`.
+Upstream provenance and pinned revision are recorded in that project's `.agents/skills/vendor/fluxcd-agent-skills/MANIFEST`.
 
 After this stub loads:
 
