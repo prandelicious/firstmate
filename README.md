@@ -207,19 +207,15 @@ Firstmate's skills live in two separate places with different audiences:
 - `.agents/skills/` - agent-loaded skills (this section's table, plus firstmate's agent-only reference skills). Every one of these assumes a live firstmate home and is meaningless, or actively misleading, installed anywhere else, so each carries `metadata.internal: true` in its frontmatter. That flag hides them from installer discovery (tools like the [skills.sh](https://skills.sh) `npx skills add` installer) without affecting how firstmate itself loads them - frontmatter metadata is inert to the agent's own skill loader.
 - `skills/` - public, installer-facing skills meant to be installed standalone into any project, independent of firstmate.
   Each one is a self-contained skill with no dependency on firstmate's paths, tools, or vocabulary.
-  Each skill owns its procedures, so only its name and one-line purpose appear here:
+  It carries only `stow` today; each skill owns its procedures, so only its name and one-line purpose appear here:
 
   | Skill | Purpose |
   | ----- | ------- |
   | `skills/stow` | Sweep a session for durable knowledge and file it by explicit instructions, local conventions, or the private `.stow-notes.md` fallback |
-  | `skills/bws` | Safe Bitwarden Secrets Manager CLI (`bws`, not `bw`) operations with a bundled redaction helper |
-  | `skills/kubectl-ops` | Safe Kubernetes and K3s `kubectl` operations with context, namespace, redaction, and `cp` verification guards |
-  | `skills/postgres-admin` | Safe PostgreSQL administration covering role separation, schema ownership, dumps and restores, and isolated restore testing |
-  | `skills/sops-age` | Safe Mozilla SOPS and age encryption workflows with guarded private-key injection |
-  | `skills/google-developer-docs-style` | Apply Google developer documentation style to technical prose |
 
   `skills/stow` intentionally shares no code with the firstmate-internal `.agents/skills/stow` it is named after, so the two can evolve independently.
-  Each other public skill is the single procedure owner for its domain; firstmate's same-named `.agents/skills/` stub only routes loaders to it.
+  The rest of the suite - `bws`, `kubectl-ops`, `postgres-admin`, `sops-age`, `google-developer-docs-style`, and the vendored `fluxcd-agent-skills` tree - lives in the iafk project under its own `.agents/skills/`.
+  Each of those skills is the single procedure owner for its domain; firstmate's same-named `.agents/skills/` stub only routes loaders to it.
 
 ## Documentation
 
